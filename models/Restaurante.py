@@ -1,4 +1,5 @@
 from models.Avaliacao import Avaliacao
+from models.cardapio.ItemCardapio import ItemCardapio
 
 class Restaurante:
     restaurantes = []
@@ -11,6 +12,7 @@ class Restaurante:
         self._nome = nome.title()
         self._categoria = categoria
         self._status = False
+        self._cardapio = []
         self._avaliacao = []
         # inserindo o objeto na lista `restaurantes` assim que é instância
         Restaurante.restaurantes.append(self)
@@ -43,3 +45,21 @@ class Restaurante:
         quantidade_de_notas = len(self._avaliacao)
         media = round(soma_das_notas / quantidade_de_notas, 1)
         return media
+    
+    def adicionar_no_cardapio(self, item):
+        # `isinstance(objeto, classe)` => função embutida que é usada para verificar
+        #                                 se um objeto é uma instância de uma classe 
+        #                                 ou de uma classe derivada dela.
+        if isinstance(item, ItemCardapio):
+            self._cardapio.append(item)
+
+    @property
+    def exibir_cardapio(self):
+        print(f'Cardapio do restaurante {self._nome}\n')
+        for i, item in enumerate(self._cardapio, start=1):
+            if hasattr(item, 'descricao'):
+                msg_prato = f'{i}. Nome: {item._nome} | R$ {item._preco} | Descrição: {item.descricao}'
+                print(msg_prato)
+            else:
+                msg_bebida = f'{i}. Nome: {item._nome} | R$ {item._preco} | Tamanho: {item.tamanho}'
+                print(msg_bebida)
